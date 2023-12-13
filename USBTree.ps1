@@ -25,7 +25,7 @@ function global:Out-child($numberOfLevel,$devs,$displayScriptBlock){
     # すべての$devsを処理
     foreach($dev in $devs){
         # スクリプトブロック（$$parentDevice）を使って現在のデバイスを出力
-        Write-Output "$(' '*$numberOfLevel)$(& $displayScriptBlock $dev)"
+        & $displayScriptBlock $numberOfLevel $dev
         # 子があるならレベルを増やして再帰呼び出し
         if($dev.child.length -ne 0){
             out-child ($numberOfLevel+1) $dev.child $displayScriptBlock
