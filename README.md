@@ -4,16 +4,16 @@ PowerShellを使ってWindowsのデバイスの親子関係を表示
 ### 事前準備
 PowerShellで以下のコマンドを実行し、デバイス情報を変数に記録させておく。この情報にあるParentIDPrefixを使い、子をchildに入れる。
 
-    $mydev=Get-CimInstance Win32_PnPEntity | %{ $p=@{}; 
-        $x=(Join-Path "HKLM:\SYSTEM\CurrentControlSet\Enum" $_.DeviceID | Get-ItemProperty) ;
-        foreach($y in $x.psobject.Properties.name ){ $p[$y]=$x.$y };
-        Add-Member -InputObject $_ -NotePropertyMembers $p -ErrorAction SilentlyContinue -PassThru }
+    $USB=(Get-CimInstance Win32_USBControllerDevice).Dependent.DeviceID | ? {$_ -notlike "BTH*"} | ? {$_ -notlike "SWD*"}
+    $mydev=Get-CimInstance Win32_PnPEntity |? DeviceID -in $USB | %{ $p=@{}; $x=(Join-Path "HKLM:\SYSTEM\CurrentControlSet\Enum" $_.DeviceID | Get-ItemProperty) ; foreach($y in $x.psobject.Properties.name ){ $p[$y]=$x.$y }; Add-Member -InputObject $_ -NotePropertyMembers $p -ErrorAction SilentlyContinue -PassThru }
     $mydev | Add-Member -NotePropertyName 'Child' -NotePropertyValue @()
 
 ### 実行
 DevTree.ps1を読み込む。関数ProcとOut-Childが定義される。
 
-$myDevに記録されているデバイスのリストの親子関係を処理する（$myDevが変更される）
+    .\DevTree.ps1
+
+procコマンド（関数）で$myDevに記録されているデバイスのリストの親子関係を処理する（$myDevが変更される）
 
     proc ([ref]$myDev)
 
