@@ -1,5 +1,5 @@
 # ASCII.JP Windows Info 2023年12月17日公開記事プログラム
-PowerShellを使ってWindowsのデバイスの親子関係を表示
+PowerShellを使ってWindowsのUSBデバイスの親子関係を表示
 
 ### 事前準備
 PowerShellで以下のコマンドを実行し、デバイス情報を変数に記録させておく。この情報にあるParentIDPrefixを使い、子をchildに入れる。
@@ -13,7 +13,7 @@ DevTree.ps1を読み込む。関数ProcとOut-Childが定義される。
 
     .\DevTree.ps1
 
-procコマンド（関数）で$myDevに記録されているデバイスのリストの親子関係を処理する（$myDevが変更される）
+procコマンド（関数）で$myDevに記録されているUSBデバイスのリストの親子関係を処理する（$myDevが変更される）
 
     proc ([ref]$myDev)
 
